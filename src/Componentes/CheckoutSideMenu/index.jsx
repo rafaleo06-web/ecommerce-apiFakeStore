@@ -29,11 +29,28 @@ function CheckoutSideMenu() {
     context.setSearchByTitle(null);
   };
 
+  const updateQuantity = (id, action) => {
+    let newQuantity;
+    const updatedProducts = context.cartProducts.map((product) => {
+      if (product.id === id) {
+        if (product.quantity > 1 && action == "decrement") {
+          newQuantity = product.quantity - 1;
+          return { ...product, quantity: newQuantity };
+        } else if (action == "increment") {
+          newQuantity = product.quantity + 1;
+          return { ...product, quantity: newQuantity };
+        }
+      }
+      return product;
+    });
+    context.setcartProducts(updatedProducts);
+  };
+
   return (
     <aside
       className={`${
         context.isVisibleCheckoutSideMenu ? "flex" : "hidden"
-      } w-[500px] h-[calc(100vh-68px)] flex-col fixed top-[68px] right-0 border border-black rounded-lg bg-white p-3 scrollable-cards`}
+      } w-[450px] h-[calc(100vh-68px)] flex-col fixed top-[68px] right-0 border border-black rounded-lg bg-white p-3 scrollable-cards`}
     >
       <div className="flex justify-between items-center pb-4">
         <h2 className="font-medium text-xl">My Order</h2>
@@ -44,13 +61,19 @@ function CheckoutSideMenu() {
       </div>
       <div className="px-4 flex-1">
         {context.cartProducts.map((product) => (
-          <OrderCard key={product.id} product={product} handleDelete={handleDelete} />
+          <OrderCard
+            key={product.id}
+            product={product}
+            handleDelete={handleDelete}
+            quantityValidation={true}
+            updateQuantity={updateQuantity}
+          />
         ))}
       </div>
       <div className="px-6 ">
         <p className="flex justify-between items-center mb-2">
           <span className="font-light">Total: </span>
-          <span className="font-medium text-2xl">${totalPrice(context.cartProducts)}</span>
+          <span className="font-medium text-2xl">${+totalPrice(context.cartProducts).toFixed(2)}</span>
         </p>
         <Link to="/myorders/last">
           <button className="w-full bg-black py-3 text-white rounded-lg" onClick={() => handleCheckout()}>

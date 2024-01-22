@@ -1,8 +1,43 @@
 import { createContext, useState, useEffect } from "react";
 import { apiUrl } from "../../api";
+
 export const ShoppingCartContext = createContext();
 
-export const ShoppingCartProvide = ({ children }) => {
+export const initializeLocalStorage = () => {
+  const accountInLocalStorage = localStorage.getItem("account"); // estado de la cuenta
+  const signOutInLocalStorage = localStorage.getItem("sign-out"); // estado de cierre de sesión
+  const savedOrder = localStorage.getItem("order");
+
+  let parsedAccount;
+  let parsedSignOut;
+  let parsedOrder;
+
+  if (!accountInLocalStorage) {
+    // si NO existen
+    localStorage.setItem("account", JSON.stringify([])); // se CREAN with object empty
+    parsedAccount = [];
+  } else {
+    parsedAccount = JSON.parse(accountInLocalStorage);
+  }
+  if (!signOutInLocalStorage) {
+    // si NO existen
+    localStorage.setItem("sign-out", JSON.stringify(false)); // se CREAN
+    parsedSignOut = false;
+  } else {
+    parsedSignOut = JSON.parse(accountInLocalStorage);
+  }
+  if (!savedOrder) {
+    localStorage.setItem("order", JSON.stringify([]));
+    parsedOrder = [];
+  } else {
+    parsedOrder = JSON.parse(savedOrder);
+  }
+};
+
+export const ShoppingCartProvider = ({ children }) => {
+  const [account, setAccount] = useState([]);
+  const [signOut, setSignOut] = useState(false);
+
   //COUNT CLICK IN SHOOPING CART
   const [count, setCount] = useState(0);
 
@@ -33,8 +68,6 @@ export const ShoppingCartProvide = ({ children }) => {
   const [searchByTitle, setSearchByTitle] = useState(null);
 
   const [searchByCategory, setSearchByCategory] = useState(null);
-
-  console.log(searchByTitle);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,6 +107,29 @@ export const ShoppingCartProvide = ({ children }) => {
     setFilteredItems(filteredItemsByTitleAndCategory(items, searchByTitle, searchByCategory));
   }, [items, searchByTitle, searchByCategory]);
 
+  useEffect(() => {
+    const savedOrder = localStorage.getItem("order");
+
+    // Cargar la orden inicial desde el localStorage
+    if (savedOrder) {
+      const parsedOrder = JSON.parse(savedOrder); //at the start string [], convert PARSE array empty[]
+
+      setOrder(parsedOrder);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (order.length > 0) {
+      localStorage.setItem("order", JSON.stringify(order));
+    }
+  }, [order]);
+
+  useEffect(() => {
+    if (account.length > 0) {
+      localStorage.setItem("account", JSON.stringify(account));
+    }
+  }, [account]);
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -99,6 +155,10 @@ export const ShoppingCartProvide = ({ children }) => {
         setFilteredItems,
         searchByCategory,
         setSearchByCategory,
+        account,
+        setAccount,
+        signOut,
+        setSignOut,
       }}
     >
       {children}

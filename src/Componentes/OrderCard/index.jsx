@@ -1,7 +1,10 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { MinusSmallIcon, PlusSmallIcon } from "@heroicons/react/20/solid";
 
 function OrderCard(props) {
-  const { id, title, image, price } = props.product;
+  const { id, title, image, price, quantity } = props.product;
+  const { quantityValidation } = props;
+  const { updateQuantity } = props;
   const handleDelete = props.handleDelete;
 
   let renderXMarkIcon;
@@ -18,10 +21,33 @@ function OrderCard(props) {
         <figure>
           <img className="w-[100px] h-full rounded-lg object-cover" src={image} alt={title} />
         </figure>
-        <p className="text-sm font-light">{title}</p>
       </div>
-      <div className="flex items-center gap-2">
-        <p className="text-lg font-medium">{price}</p>
+      <div className="flex items-center gap-2 flex-col">
+        <p className="text-sm font-light">{title}</p>
+        <div className="flex justify-center items-center ">
+          {quantityValidation ? (
+            <span className="flex gap-1 pr-10">
+              <button
+                onClick={() => {
+                  updateQuantity(id, "decrement");
+                }}
+              >
+                <MinusSmallIcon className="w-4" />
+              </button>
+              <p>{quantity}</p>
+              <button
+                onClick={() => {
+                  updateQuantity(id, "increment");
+                }}
+              >
+                <PlusSmallIcon className="w-4" />
+              </button>
+            </span>
+          ) : (
+            <p className="pr-5">{quantity} Units</p>
+          )}
+          <p>{`$.${price * quantity}`}</p>
+        </div>
       </div>
       {renderXMarkIcon}
     </div>

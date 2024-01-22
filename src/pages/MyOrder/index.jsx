@@ -10,7 +10,7 @@ function MyOrder() {
   const currentPath = window.location.pathname;
   let index = currentPath.substring(currentPath.lastIndexOf("/") + 1);
 
-  if (index === "last") index = context.order?.length - 1; // si context.order exite, halla la longitud - 1, utlima posicion
+  if (index === "last") index = context.order?.length - 1; // si context.order existe, halla la longitud - 1, utlima posicion
 
   return (
     <div>

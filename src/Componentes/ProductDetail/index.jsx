@@ -9,7 +9,7 @@ function ProductDetail() {
     <aside
       className={`${
         context.isVisibleProductDetail ? "flex" : "hidden"
-      } w-[500px] h-[calc(100vh-68px)] flex-col fixed top-[68px] right-0 border border-black rounded-lg bg-white p-3`}
+      } w-[450px] h-[calc(100vh-68px)] flex-col fixed top-[68px] right-0 border border-black rounded-lg bg-white p-3`}
     >
       <div className="flex justify-between items-center pb-4">
         <h2 className="font-medium text-xl">Detail</h2>
@@ -19,11 +19,11 @@ function ProductDetail() {
         ></XMarkIcon>
       </div>
       <div>
-        <figure className="px-6">
+        <figure className="px-6 flex justify-center">
           <img
             src={selectedProduct && selectedProduct.image}
             alt={selectedProduct && selectedProduct.title}
-            className="w-full h-[280px] object-cover rounded-lg"
+            className="w-[200px]  object-cover rounded-lg"
           />
         </figure>
         <p className="flex flex-col p-6">

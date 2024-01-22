@@ -13,7 +13,7 @@ function OrdersCard(props) {
         </span>
         <span className="flex gap-1 items-center justify-center">
           <CurrencyDollarIcon className="h-6 w-6 cursor-pointer text-black" />
-          {totalPrice}
+          {+totalPrice.toFixed(2)}
         </span>
         <span className="flex gap-1 items-center justify-center">
           <CalendarDaysIcon className="h-6 w-6 cursor-pointer text-black" />
