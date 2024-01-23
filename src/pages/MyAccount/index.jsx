@@ -1,5 +1,6 @@
 import { useContext, useState, useRef } from "react";
 import { ShoppingCartContext } from "../../Componentes/Context";
+import { useEffect } from "react";
 
 function MyAccount() {
   const context = useContext(ShoppingCartContext);
@@ -16,19 +17,26 @@ function MyAccount() {
       password: formData.get("password"),
     };
     localStorage.setItem("account", JSON.stringify(data));
-    context.setAccount(data);
+    context.setAccount([data]);
   };
+
+  //cada vez que cambie el account del localStorage, volveremos a leerlo, parsearlo y setearlo en el estado.
+  //React detecte cambio en el estado y re-renderice el componente con los datos actualizados.
+  useEffect(() => {
+    const account = JSON.parse(localStorage.getItem("account"));
+    context.setAccount(account);
+  }, [localStorage.getItem("account")]);
 
   const renderUserInfo = () => {
     return (
       <div className="flex flex-col w-80">
         <p>
           <span className="font-light text-sm">Name: </span>
-          <span>{parsedAccount?.name}</span>
+          <span>{parsedAccount[0]?.name}</span>
         </p>
         <p>
           <span className="font-light text-sm">Email: </span>
-          <span>{parsedAccount?.email}</span>
+          <span>{parsedAccount[0]?.email}</span>
         </p>
         <button className="border border-black rounded-lg mt-6 py-3" onClick={() => setView("edit-user-info")}>
           Edit

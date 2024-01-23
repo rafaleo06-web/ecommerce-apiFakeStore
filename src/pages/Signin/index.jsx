@@ -54,31 +54,23 @@ function SignIn() {
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  let id = 0;
-  function getUniqueId() {
-    return ++id;
-  }
-
   const createAccount = (e) => {
     e.preventDefault();
-    const id = getUniqueId();
     const name = nameRef.current.value;
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    const data = { id, name, email, password };
+    const data = { name, email, password };
 
     localStorage.setItem("account", JSON.stringify(data));
-    context.setAccount([...context.account, data]);
-    // handleSignIn();
-    const printAccount = context.account;
-    console.log({ printAccount });
+    context.setAccount([data]);
+    handleSignIn();
   };
 
-  // const handleSignIn = () => {
-  //   localStorage.setItem("sign-out", JSON.stringify(false));
-  //   context.setSignOut(false);
-  //   navigate("/", { replace: true });
-  // };
+  const handleSignIn = () => {
+    localStorage.setItem("sign-out", JSON.stringify(false));
+    context.setSignOut(false);
+    navigate("/", { replace: true });
+  };
 
   const renderCreateUserInfo = () => {
     return (
